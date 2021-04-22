@@ -4,24 +4,22 @@
       filled
       v-model="addGameTextInput"
       label="Ajouter un jeu"
-      hint="Nom du jeu"
       @keydown="searchGame()"
       lazy-rules
       :rules="[val => (val && val.length > 0) || 'Please type something']"
     />
-    
+    <q-separator />
     <q-card
       class="my-card"
       v-for="oneGame in searchResults"
       :key="oneGame.id"
-      @click="addGame(oneGame)"
     >
       <q-card-section>
         <div class="text-h6">{{ oneGame.name }}</div>
       </q-card-section>
       <q-card-actions>
-        <q-btn @click="addGame(oneGame)" flat>A faire</q-btn>
-        <q-btn @click="addGame(oneGame)" flat>Fait</q-btn>
+        <q-btn @click="addGame(oneGame, false)" icon="add" flat>A faire</q-btn>
+        <q-btn @click="addGame(oneGame, true)" icon="done" flat>Fait</q-btn>
       </q-card-actions>
     </q-card>
   </div>
@@ -31,7 +29,7 @@
 import igdbApi from "../api/igdb";
 
 let timeout = null;
-console.log(process.env.API_URL);
+
 export default {
   data() {
     return {
@@ -52,8 +50,9 @@ export default {
         }
       }, 800);
     },
-    addGame(oneGame) {
-      this.$store.dispatch("todo/addGameToList", oneGame);
+    addGame(oneGame, isDone) {
+      const game = { ...oneGame, done: isDone };
+      this.$store.dispatch("todo/addGameToList", game);
       this.addGameTextInput = "";
       this.searchResults = [];
     }

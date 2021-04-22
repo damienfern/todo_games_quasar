@@ -1,3 +1,5 @@
+import { Notify } from 'quasar'
+
 export default {
   namespaced: true,
   state: () => ({
@@ -5,8 +7,11 @@ export default {
   }),
   mutations: {
     addGame(state, game) {
-      game.done = false
       state.listGames.push(game)
+      Notify.create({
+        type: 'positive',
+        message: 'Ajouté !'
+      })
     },
     deleteGame(state, game) {
       const updatedList = state.listGames.filter(item => item.id !== game.id)
@@ -18,8 +23,8 @@ export default {
     }
   },
   actions: {
-    addGameToList (context, game) {
-      context.commit('addGame', game)
+    addGameToList (context, gameInfo) {
+      context.commit('addGame', gameInfo)
     },
     deleteGameFromList(context, game) {
       context.commit('deleteGame', game)

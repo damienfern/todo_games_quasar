@@ -10,6 +10,7 @@
           </q-avatar>
           Todo Games
         </q-toolbar-title>
+        <q-btn dense flat round icon="people" @click="right = !right" />
       </q-toolbar>
 
     </q-header>
