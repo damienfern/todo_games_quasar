@@ -1,11 +1,16 @@
 <template>
-  <q-page class="flex flex-center">
-    <h1>CHATEAAAAAAAAAAAAU</h1>
+  <q-page class="flex">
+    <list-item />
   </q-page>
 </template>
 
 <script>
+import ListItem from '../components/List/ListItem'
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {
+    ListItem
+  }
 }
 </script>

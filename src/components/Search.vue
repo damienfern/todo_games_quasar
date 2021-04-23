@@ -2,6 +2,7 @@
   <div>
     <q-input
       filled
+      ref="addGameTextInput"
       v-model="addGameTextInput"
       label="Ajouter un jeu"
       @keydown="searchGame()"
@@ -55,6 +56,7 @@ export default {
       this.$store.dispatch("todo/addGameToList", game);
       this.addGameTextInput = "";
       this.searchResults = [];
+      this.$refs.addGameTextInput.resetValidation();
     }
   }
 };
