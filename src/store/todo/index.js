@@ -7,11 +7,16 @@ export default {
   }),
   mutations: {
     addGame(state, game) {
-      state.listGames.push(game)
-      Notify.create({
-        type: 'positive',
-        message: 'Ajouté !'
-      })
+      const notif = {}
+      if (state.listGames.filter(item => item.id === game.id).length > 0) {
+        notif.type = 'warning'
+        notif.message = 'Ce jeu existe déjà dans votre liste !'
+      } else {
+        state.listGames.push(game)
+        notif.type = 'positive'
+        notif.message = 'Ajouté !'
+      }
+      Notify.create(notif)
     },
     deleteGame(state, game) {
       const updatedList = state.listGames.filter(item => item.id !== game.id)
