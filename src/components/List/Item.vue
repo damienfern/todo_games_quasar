@@ -16,8 +16,8 @@
       </q-chip>
       </q-card-section>
       <q-card-section>
-        <p>{{ game.storyline }}</p>
-        Plus de détails : <a :href="game.url">{{ game.url }}</a>
+        <p>{{ gameData.storyline }}</p>
+        Plus de détails : <a :href="gameData.url">{{ gameData.url }}</a>
       </q-card-section>
       <q-card-actions>
         <q-btn
@@ -54,6 +54,11 @@ export default {
   },
   data() {
     return {
+      gameData: {
+        name :null,
+        url:null, 
+        storyline: null
+      },
       cover: {
         url: null
       }
@@ -61,12 +66,22 @@ export default {
   },
   created() {
     const that = this
-    igdbApi.getUrlCoverByCoverID(this.game.cover)
+    igdbApi.getGameById(this.game.id)
         .then((response) => {
-          that.cover = {
-            url: 'https://' + response.data[0].url
-          }
+          that.gameData = response.data[0]
+          igdbApi.getUrlCoverByCoverID(this.gameData.cover)
+            .then((response) => {
+              that.cover = {
+                url: 'https://' + response.data[0].url
+              }
+            })
         })
+    // igdbApi.getUrlCoverByCoverID(this.game.cover)
+    //     .then((response) => {
+    //       that.cover = {
+    //         url: 'https://' + response.data[0].url
+    //       }
+    //     })
   },
   methods: {
     ...mapActions({

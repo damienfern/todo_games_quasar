@@ -3,7 +3,7 @@ import apicalypse from 'apicalypse'
 
 const clientId = process.env.CLIENTID
 const secret = process.env.SECRET
-let token = ''
+let token = process.env.TOKEN
 
 axios.interceptors.response.use(response => {
   return response
@@ -27,7 +27,7 @@ const authenticateGameDB = function () {
   })
 }
 
-authenticateGameDB()
+// authenticateGameDB()
 
 const getGamesByName = async function (gameName) {
   return await apicalypse({
@@ -39,10 +39,27 @@ const getGamesByName = async function (gameName) {
     },
     queryMethod: 'body'
   })
-  .fields(['name', 'url', 'cover', 'summary', 'storyline'])
+  .fields(['name'])
   .search(gameName)
   .where('version_parent = null')
   .limit(10)
+  .request('/games/')
+}
+
+
+const getGameById = async function (gameId) {
+  return await apicalypse({
+    method: 'post',
+    baseURL: process.env.IGDB_API,
+    headers: {
+      'Client-ID': clientId,
+      'Authorization': `Bearer ${token}`
+    },
+    queryMethod: 'body'
+  })
+  .fields(['name', 'url', 'cover', 'summary', 'storyline'])
+  .where(`id = ${gameId}`)
+  .limit(1)
   .request('/games/')
 }
 
@@ -65,5 +82,6 @@ const getUrlCoverByCoverID = async function (coverID) {
 
 export default {
   getGamesByName,
+  getGameById,
   getUrlCoverByCoverID
 }

@@ -2,9 +2,23 @@ import { Notify } from 'quasar'
 
 export default {
   namespaced: true,
-  state: () => ({
-    listGames: []
-  }),
+  state: () => {
+    let listGames = []
+    const gamesInStorageString = localStorage.getItem('listGames')
+    try {
+      const gamesSaved = JSON.parse(gamesInStorageString)
+      if (!Array.isArray(gamesSaved)) {
+        throw new Error('Save in LocalStorage is not an array. Deleting...')
+      }
+      listGames = gamesSaved
+    } catch (e) {
+      localStorage.removeItem('listGames')
+      listGames = []
+    }
+    return {
+      listGames
+    }
+  },
   mutations: {
     addGame(state, game) {
       const notif = {}
@@ -36,6 +50,11 @@ export default {
     },
     changeGameStatus(context, game) {
       context.commit('changeGameStatus', game)
+    }
+  },
+  getters: {
+    lightListGames: state => {
+      return state.listGames.map(game => ({ id: game.id, name: game.name, done: game.done }))
     }
   }
 }
